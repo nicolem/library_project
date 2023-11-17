@@ -10,7 +10,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_11_17_195156) do
+ActiveRecord::Schema.define(version: 2023_11_17_212809) do
+
+  create_table "borrowers", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "credit_card", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["name", "credit_card"], name: "index_borrowers_on_name_and_credit_card", unique: true
+  end
+
+  create_table "borrowers_libraries", id: false, force: :cascade do |t|
+    t.integer "borrower_id", null: false
+    t.integer "library_id", null: false
+    t.index ["borrower_id", "library_id"], name: "index_borrowers_libraries_on_borrower_id_and_library_id", unique: true
+  end
 
   create_table "libraries", force: :cascade do |t|
     t.string "name", null: false
