@@ -12,31 +12,30 @@ require 'rails_helper'
 # of tools you can use to make these specs even more expressive, but we're
 # sticking to rails and rspec-rails APIs to keep things simple and stable.
 
-RSpec.describe "/borrowers", type: :request do
+RSpec.describe "/libraries/1/parent_books", type: :request do
   # This should return the minimal set of attributes required to create a valid
-  # Borrower. As you add validations to Borrower, be sure to
+  # LendableBook. As you add validations to LendableBook, be sure to
   # adjust the attributes here as well.
-  let(:library) { FactoryBot.create(:library) }
-  let!(:existing_borrower) { FactoryBot.create(:borrower) }
+  let(:library){ FactoryBot.create(:library) }
   let(:valid_attributes) {
     {
-      "name": "Bob Smith",
-      "credit_card": "123",
-      "library_ids": [library.id]
+      "title": "The Golden Bowl",
+      "author":  "Sherlene Feil",
+      "isbn": "08b552c6-72f6-40fa-85f1-9ec93002132b"
     }
   }
 
   let(:invalid_attributes) {
     {
-      "name": existing_borrower.name,
-      "credit_card": existing_borrower.credit_card,
-      "library_ids": [existing_borrower.libraries.first.id]
+      "title": nil,
+      "author":  "Sherlene Feil",
+      "isbn": "08b552c6-72f6-40fa-85f1-9ec93002132b"
     }
   }
 
   # This should return the minimal set of values that should be in the headers
   # in order to pass any filters (e.g. authentication) defined in
-  # BorrowersController, or in your router and rack
+  # LendableBooksController, or in your router and rack
   # middleware. Be sure to keep this updated too.
   let(:valid_headers) {
     {}
@@ -44,32 +43,32 @@ RSpec.describe "/borrowers", type: :request do
 
   describe "POST /create" do
     context "with valid parameters" do
-      it "creates a new Borrower" do
+      it "creates a new LendableBook" do
         expect {
-          post borrowers_url,
-               params: { borrower: valid_attributes }, headers: valid_headers, as: :json
-        }.to change(Borrower, :count).by(1)
+          post library_parent_books_url(library_id: library.id),
+               params: { parent_book: valid_attributes}, headers: valid_headers, as: :json
+        }.to change(LendableBook, :count).by(1)
       end
 
-      it "renders a JSON response with the new borrower" do
-        post borrowers_url,
-             params: { borrower: valid_attributes }, headers: valid_headers, as: :json
+      it "renders a JSON response with the new lendable_book" do
+        post library_parent_books_url(library_id: library.id),
+             params: { parent_book: valid_attributes }, headers: valid_headers, as: :json
         expect(response).to have_http_status(:created)
         expect(response.content_type).to match(a_string_including("application/json"))
       end
     end
 
     context "with invalid parameters" do
-      it "does not create a new Borrower" do
+      it "does not create a new LendableBook" do
         expect {
-          post borrowers_url,
-               params: { borrower: invalid_attributes }, as: :json
-        }.to change(Borrower, :count).by(0)
+          post library_parent_books_url(library_id: library.id),
+               params: { parent_book: invalid_attributes, library_id: 1 }, as: :json
+        }.to change(LendableBook, :count).by(0)
       end
 
-      it "renders a JSON response with errors for the new borrower" do
-        post borrowers_url,
-             params: { borrower: invalid_attributes }, headers: valid_headers, as: :json
+      it "renders a JSON response with errors for the new lendable_book" do
+        post library_parent_books_url(library_id: library.id),
+             params: { parent_book: invalid_attributes }, headers: valid_headers, as: :json
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response.content_type).to match(a_string_including("application/json"))
       end
