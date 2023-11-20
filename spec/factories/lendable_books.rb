@@ -4,6 +4,6 @@ FactoryBot.define do
     library_id { FactoryBot.create(:library).id }
     borrower_id { nil }
     status { 0 }
-    due_date { Time.now+1.week }
+    due_date { Date.today+1.week }
   end
 end

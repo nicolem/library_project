@@ -4,8 +4,8 @@ class CreateLendableBooks < ActiveRecord::Migration[6.1]
       t.integer :parent_book_id, :null => false
       t.integer :library_id, :null => false
       t.integer :borrower_id
-      t.integer :status
-      t.datetime :due_date
+      t.integer :status, default: 0
+      t.date :due_date
 
       t.timestamps
     end

@@ -17,20 +17,18 @@ RSpec.describe "/borrowers", type: :request do
   # Borrower. As you add validations to Borrower, be sure to
   # adjust the attributes here as well.
   let(:library) { FactoryBot.create(:library) }
-  let!(:existing_borrower) { FactoryBot.create(:borrower) }
+  let!(:existing_borrower) { FactoryBot.create(:borrower, libraries: [library]) }
   let(:valid_attributes) {
     {
       "name": "Bob Smith",
-      "credit_card": "123",
-      "library_ids": [library.id]
+      "credit_card": "123"
     }
   }
 
   let(:invalid_attributes) {
     {
       "name": existing_borrower.name,
-      "credit_card": existing_borrower.credit_card,
-      "library_ids": [existing_borrower.libraries.first.id]
+      "credit_card": nil
     }
   }
 
@@ -46,13 +44,13 @@ RSpec.describe "/borrowers", type: :request do
     context "with valid parameters" do
       it "creates a new Borrower" do
         expect {
-          post borrowers_url,
+          post library_borrowers_url(library_id: library.id),
                params: { borrower: valid_attributes }, headers: valid_headers, as: :json
         }.to change(Borrower, :count).by(1)
       end
 
       it "renders a JSON response with the new borrower" do
-        post borrowers_url,
+        post library_borrowers_url(library_id: library.id),
              params: { borrower: valid_attributes }, headers: valid_headers, as: :json
         expect(response).to have_http_status(:created)
         expect(response.content_type).to match(a_string_including("application/json"))
@@ -62,13 +60,13 @@ RSpec.describe "/borrowers", type: :request do
     context "with invalid parameters" do
       it "does not create a new Borrower" do
         expect {
-          post borrowers_url,
+          post library_borrowers_url(library_id: library.id),
                params: { borrower: invalid_attributes }, as: :json
         }.to change(Borrower, :count).by(0)
       end
 
       it "renders a JSON response with errors for the new borrower" do
-        post borrowers_url,
+        post library_borrowers_url(library_id: library.id),
              params: { borrower: invalid_attributes }, headers: valid_headers, as: :json
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response.content_type).to match(a_string_including("application/json"))

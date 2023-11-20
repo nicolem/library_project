@@ -30,8 +30,8 @@ ActiveRecord::Schema.define(version: 2023_11_17_221236) do
     t.integer "parent_book_id", null: false
     t.integer "library_id", null: false
     t.integer "borrower_id"
-    t.integer "status"
-    t.datetime "due_date"
+    t.integer "status", default: 0
+    t.date "due_date"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

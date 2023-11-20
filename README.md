@@ -1,24 +1,27 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+ruby version 3.1.1
+rails version 6.1.7.6
 
-Things you may want to cover:
+## Setup Instructions
+```
+  rake db:prepare
+  rails s
+```
 
-* Ruby version
+## Model Diagram
+![](erd.jpg)
 
-* System dependencies
+[View Endpoint Documentation](endpoints.md)
 
-* Configuration
+[View Project Requirements](requirements.md)
 
-* Database creation
+[View Edge Case Discussion](edge_case.md)
 
-* Database initialization
+## Rspec
+ There are some tests, but I ran out of time to do a full test suite of the lending/returning logic
 
-* How to run the test suite
+ `rspec`
 
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+## Documentation
+  I have sample requests and responses shared above in the [endpoints page](endpoints.md).  I also enjoy using [Swagger](https://swagger.io/docs/) documentation as a prettier/more rounded documentation option for an api.
